@@ -1,6 +1,6 @@
 {
-  "name": "L\u00e1skom\u011br",
-  "short_name": "L\u00e1skom\u011br",
+  "name": "Láskoměr",
+  "short_name": "Láskoměr",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -9,7 +9,8 @@
     {
       "src": "/heart-icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
