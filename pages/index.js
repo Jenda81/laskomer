@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, onSnapshot, setDoc } from "firebase/firestore";
 
@@ -17,7 +21,14 @@ const db = getFirestore(app);
 export default function LoveMeter() {
   const [myLove, setMyLove] = useState(5);
   const [vercasLove, setVercasLove] = useState(5);
-  const [user, setUser] = useState("jenda");
+
+  const [user, setUser] = useState(() => {
+    return localStorage.getItem("user") || "verca";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("user", user);
+  }, [user]);
 
   const loveDoc = doc(db, "loveMeter", "shared");
 
@@ -43,37 +54,42 @@ export default function LoveMeter() {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "auto", padding: 20, fontFamily: "Arial" }}>
-      <h2>Láskoměr 💘</h2>
-      <label>Zadej své jméno (jenda / verca):</label>
-      <input
+    <div className="grid gap-6 p-4 max-w-md mx-auto">
+      <Label htmlFor="username">Jsi Jenda nebo Verča?</Label>
+      <Input
+        id="username"
+        placeholder="zadej jenda nebo verca"
         value={user}
         onChange={(e) => setUser(e.target.value)}
-        style={{ width: "100%", padding: 8, marginBottom: 16 }}
       />
-      <label>Moje láska:</label>
-      <input
-        type="range"
-        min="1"
-        max="20"
-        value={myLove}
-        onChange={(e) => {
-          const val = parseInt(e.target.value);
-          setMyLove(val);
-          updateLove(val);
-        }}
-        style={{ width: "100%" }}
-      />
-      <div style={{ textAlign: "center", fontSize: 24 }}>
-        {myLove === 1 ? "💀" : myLove === 20 ? "❤️" : myLove}
-      </div>
 
-      <hr style={{ margin: "20px 0" }} />
+      <Card>
+        <CardContent className="p-4 grid gap-2">
+          <Label>Tvoje láska</Label>
+          <Slider
+            min={1}
+            max={20}
+            step={1}
+            value={[myLove]}
+            onValueChange={([val]) => {
+              setMyLove(val);
+              updateLove(val);
+            }}
+          />
+          <div className="text-center text-2xl">
+            {myLove === 1 ? "💀" : myLove === 20 ? "❤️" : myLove}
+          </div>
+        </CardContent>
+      </Card>
 
-      <label>Láska od druhého:</label>
-      <div style={{ textAlign: "center", fontSize: 24 }}>
-        {vercasLove === 1 ? "💀" : vercasLove === 20 ? "❤️" : vercasLove}
-      </div>
+      <Card>
+        <CardContent className="p-4 grid gap-2">
+          <Label>Láska od druhého</Label>
+          <div className="text-center text-2xl">
+            {vercasLove === 1 ? "💀" : vercasLove === 20 ? "❤️" : vercasLove}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
