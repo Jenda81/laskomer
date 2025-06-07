@@ -60,7 +60,12 @@ export default function LoveMeter() {
         id="username"
         placeholder="zadej jenda nebo verca"
         value={user}
-        onChange={(e) => setUser(e.target.value)}
+        onChange={(e) => setUser(e.target.value.trim().toLowerCase())}
+        onBlur={(e) => {
+          const cleaned = e.target.value.trim().toLowerCase();
+          setUser(cleaned);
+          localStorage.setItem("user", cleaned);
+        }}
       />
 
       <Card>
