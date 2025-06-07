@@ -21,10 +21,15 @@ const db = getFirestore(app);
 export default function LoveMeter() {
   const [myLove, setMyLove] = useState(5);
   const [vercasLove, setVercasLove] = useState(5);
+  const [user, setUser] = useState("verca"); // Výchozí hodnota
 
-  const [user, setUser] = useState(() => {
-    return localStorage.getItem("user") || "verca";
-  });
+  // Načti z localStorage po načtení stránky
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(savedUser);
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("user", user);
